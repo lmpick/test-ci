@@ -26,3 +26,20 @@ void aws_byte_buf_init_verify(struct aws_allocator *allocator, struct aws_byte_b
 
     aws_byte_buf_init(allocator, buf, len);
 }
+
+void aws_byte_buf_from_c_str_verify(char *c_str) {
+
+    size_t len = nondet_size_t();
+
+    // need c_str to be a valid pointer of size len * sizeof(char)
+    c_str = malloc(len * sizeof(*c_str));
+
+    // need *c_str to be a '\0'-terminated C string, so assume an arbitrary character
+    // within the array is 0
+    uint8_t index = nondet_int();
+    __CPROVER_assume(index >= 0 && index < len);
+    c_str[index] = 0;
+    __CPROVER_assume(len < MAX_STR_LEN);
+
+    aws_byte_buf_from_c_str(c_str);
+}
