@@ -1,5 +1,5 @@
 cbmcpkg: cbmc-memcpy-loop.tar.gz
 jobos: ubuntu16
-cbmcflags: "--bounds-check;--pointer-check;--function;aws_byte_buf_from_c_str_verify;--unwindset;strlen.0:33;--unwinding-assertions"
+cbmcflags: "--bounds-check;--pointer-check;--function;aws_byte_buf_from_c_str_verify;--unwindset;strlen.0:33;--unwinding-assertions;--no-report;--no-coverage"
 goto: proofs.goto
 expected: "SUCCESSFUL"
