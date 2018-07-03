@@ -4,8 +4,8 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdarg.h>
+#include <proof_helpers.h>
 
-#define MAX_ITEM_SIZE 17
 #define MAX_STR_LEN 32
 #define MAX_BUF_LEN 32
 
