@@ -1,7 +1,0 @@
-cbmcpkg: cbmc-memcpy-loop.tar.gz
-jobos: ubuntu16
-cbmcflags: "--bounds-check;--pointer-check;--function;aws_byte_buf_split_on_char_n_verify;--unwindset;strlen.0:3,memcpy.0:33,aws_byte_buf_split_on_char_n.0:3,memchr.0:3;--unwinding-assertions"
-goto: proofs.goto
-expected: "SUCCESSFUL"
-coverage: false
-report: false
