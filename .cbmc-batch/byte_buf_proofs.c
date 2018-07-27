@@ -39,7 +39,7 @@ void aws_byte_buf_from_c_str_verify(char *c_str) {
     uint8_t index = nondet_int();
     __CPROVER_assume(index >= 0 && index < len);
     c_str[index] = 0;
-    __CPROVER_assume(len < MAX_STR_LEN);
+    __CPROVER_assume(len <= MAX_STR_LEN);
 
     aws_byte_buf_from_c_str(c_str);
 }
@@ -48,7 +48,7 @@ void aws_byte_buf_append_verify(struct aws_byte_buf *to, struct aws_byte_cursor 
 
     size_t len1 = nondet_size_t(0);
     size_t len2 = nondet_size_t(1);
-    __CPROVER_assume(len1 <  MAX_BUF_LEN);
+    __CPROVER_assume(len1 <= MAX_BUF_LEN);
 
     // need arbitrary buf that is "correct enough"
     to = malloc(sizeof(*to));
@@ -59,31 +59,8 @@ void aws_byte_buf_append_verify(struct aws_byte_buf *to, struct aws_byte_cursor 
     // need arbitrary cursor
     from = malloc(sizeof(*from));
     from->ptr = malloc(len2);
-    __CPROVER_assume(from->len < len2);
+    __CPROVER_assume(from->len <= len2);
 
     aws_byte_buf_append(to, from);
 
-}
-
-void aws_byte_buf_split_on_char_n_verify(struct aws_byte_buf *input_str, char split_on, struct aws_array_list *output, size_t n) {
-
-    size_t len = nondet_size_t(0);
-    
-    // need arbitrary buf that is "correct enough"
-    input_str = malloc(sizeof(*input_str));
-    input_str->buffer = malloc(len);
-    input_str->capacity = len;
-    __CPROVER_assume(len < MAX_BUF_LEN);
-    __CPROVER_assume(input_str->len < input_str->capacity);
-
-    // need arbitrary array_list
-    size_t initial_item_allocation = nondet_size_t(1);
-    size_t item_size = nondet_size_t(2);
-    struct aws_array_list *output = get_arbitrary_array_list(initial_item_allocation, item_size);
-    assert(output->item_size == item_size);
-
-    __CPROVER_assume(item_size <  MAX_ITEM_SIZE);
-    __CPROVER_assume(item_size >= sizeof(struct aws_byte_cursor));
-
-    aws_byte_buf_split_on_char_n(input_str, split_on, output, n);
 }
