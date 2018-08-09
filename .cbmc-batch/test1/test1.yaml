@@ -1,3 +1,0 @@
-cbmcpkg: cbmc-memcpy-loop.tar.gz
-jobos: ubuntu16
-cbmcflags: "--bounds-check;--pointer-check"

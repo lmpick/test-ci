@@ -1,0 +1,41 @@
+--- ../../source/array_list.c	2018-06-28 18:04:11.000000000 -0400
++++ ./array_list_old.c	2018-07-02 10:54:38.000000000 -0400
+@@ -25,8 +25,6 @@
+     size_t allocation_size = initial_item_allocation * item_size;
+     list->data = NULL;
+     list->item_size = item_size;
+-    list->current_size = 0;
+-    list->length = 0;
+ 
+     if (allocation_size > 0) {
+         list->data = aws_mem_acquire(list->alloc, allocation_size);
+@@ -243,9 +241,9 @@
+ }
+ 
+ int aws_array_list_set_at(struct aws_array_list *list, const void *val, size_t index) {
+-    size_t necessary_size = (index + 1) * list->item_size;
++    size_t necessary_size = index * list->item_size;
+ 
+-    if (list->current_size < necessary_size) {
++    if (list->current_size <= necessary_size) {
+         if (!list->alloc) {
+             return aws_raise_error(AWS_ERROR_INVALID_INDEX);
+         }
+@@ -272,14 +270,12 @@
+             return AWS_OP_ERR;
+         }
+ 
+-        if (list->data) {
+-            memcpy(temp, list->data, list->current_size);
++        memcpy(temp, list->data, list->current_size);
+ 
+ #ifdef DEBUG_BUILD
+-            memset((void *) ((uint8_t *) temp + list->current_size), SENTINAL, new_size - list->current_size);
++        memset((void *) ((uint8_t *) temp + list->current_size), SENTINAL, new_size - list->current_size);
+ #endif
+-            aws_mem_release(list->alloc, list->data);
+-        }
++        aws_mem_release(list->alloc, list->data);
+         list->data = temp;
+         list->current_size = new_size;
+     }
